@@ -1,0 +1,105 @@
+<% set = @conversation_set %>
+<div data-controller="download-markdown"
+     data-download-markdown-content-value="<%= set.completed? ? set.to_markdown : '' %>"
+     data-download-markdown-filename-value="<%= set.markdown_filename %>"
+     style="max-width: 860px;">
+
+  <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
+    <div>
+      <p class="text-muted small mb-1">Conversation openers</p>
+      <h1 class="h3 mb-1"><%= @book_pick.title %></h1>
+      <p class="text-muted small mb-0">
+        <%= link_to "← My book club picks", book_picks_path, class: "text-muted" %>
+        &nbsp;&middot;&nbsp;
+        <%= link_to "The book", book_pick_path(@book_pick), class: "text-muted" %>
+        &nbsp;&middot;&nbsp;
+        Generated <%= set.generated_at ? "#{time_ago_in_words(set.generated_at)} ago" : "at an unknown time" %>
+      </p>
+    </div>
+    <div class="d-flex flex-wrap gap-2 align-items-start">
+      <%= link_to "Edit book", edit_book_pick_path(@book_pick), class: "btn btn-outline-secondary btn-sm" %>
+      <%= render "book_picks/openers_button", book_pick: @book_pick, label: "New openers",
+                 button_class: "btn btn-outline-secondary btn-sm" %>
+      <% if set.completed? %>
+        <button class="btn btn-outline-primary btn-sm" type="button"
+                data-action="click->download-markdown#download">
+          Download .md
+        </button>
+      <% end %>
+      <button class="btn btn-outline-secondary btn-sm" type="button"
+              data-bs-toggle="collapse" data-bs-target="#raw-response"
+              aria-expanded="false" aria-controls="raw-response">
+        Show raw response
+      </button>
+    </div>
+  </div>
+
+  <p class="text-muted small mb-3">
+    <strong>AI-generated.</strong> A host&rsquo;s starting point, not a reading guide: it can get a plot detail
+    wrong, so check anything you plan to say against the book. Use the ones that sound like your club.
+  </p>
+
+  <% if set.stale? %>
+    <div class="alert alert-warning py-2 small">
+      The book details have changed since these openers were written. Get new openers to match.
+    </div>
+  <% end %>
+
+  <% if set.failed? %>
+    <%= render "conversation_sets/parse_error", book_pick: @book_pick, set: set %>
+  <% elsif set.completed? %>
+    <div class="mb-3"><%= render "book_picks/boundary_badges", book_pick: @book_pick %></div>
+
+    <% if set.unsure? %>
+      <div class="alert alert-info py-2 small">
+        The AI didn&rsquo;t know this book well, so these openers lean on your notes and ask rather than tell.
+        Check them against the book before the meeting.
+      </div>
+    <% end %>
+
+    <p class="boundary-line mb-4"><strong>Spoiler boundary:</strong> <%= set.spoiler_boundary %></p>
+
+    <h2 class="h5 mb-3">Five openers</h2>
+    <ol class="list-unstyled mb-4">
+      <% set.openers.each_with_index do |opener, i| %>
+        <li class="card opener-card mb-3">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start gap-3 mb-2">
+              <p class="opener-question mb-0"><span class="text-muted me-1"><%= i + 1 %>.</span> <%= opener["question"] %></p>
+              <span class="badge angle-badge flex-shrink-0"><%= opener["angle"] %></span>
+            </div>
+            <p class="small text-muted mb-1"><strong>Why it works:</strong> <%= opener["why_it_works"] %></p>
+            <p class="small mb-0"><strong>Follow-up:</strong> <%= opener["follow_up"] %></p>
+          </div>
+        </li>
+      <% end %>
+    </ol>
+
+    <h2 class="h5 mb-2">A spoiler-free line for the group chat</h2>
+    <blockquote class="spoiler-free mb-4"><%= set.spoiler_free_line %></blockquote>
+
+    <h2 class="h5 mb-2">If the club liked this, read next</h2>
+    <div class="row g-3 mb-4">
+      <% set.next_reads.each do |pick| %>
+        <div class="col-md-4">
+          <div class="card h-100 book-spine">
+            <div class="card-body">
+              <h3 class="h6 mb-1"><%= pick["title"] %></h3>
+              <p class="text-muted small mb-2"><%= pick["author"] %></p>
+              <p class="small mb-0"><%= pick["tie_in"] %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-muted fst-italic">These openers are still being written&hellip;</p>
+  <% end %>
+
+  <div class="collapse mt-3" id="raw-response">
+    <div class="card card-body">
+      <p class="text-muted small mb-1">Raw response from Gemini:</p>
+      <pre class="small mb-0 text-muted"><%= set.gemini_raw %></pre>
+    </div>
+  </div>
+</div>

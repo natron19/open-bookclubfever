@@ -1,0 +1,19 @@
+# Per-app guardrail configuration, read by AiGuardConfig.
+# See docs/ai-guardrails.md (Layer 5: AiOutputGuard) and docs/ai-evals.md.
+
+# A book club's notes on a book are not where personal distress shows up (a novel's dark themes are the book's,
+# not the reader's); not crisis-aware.
+crisis_terms: []
+
+# Output structure rules per AiTemplate name. Templates not listed get the
+# generic output checks only (non-empty, no prompt leak, no profanity, no new PII).
+#   format:        text | json
+#   required_keys: top-level keys the JSON object must contain
+templates:
+  health_ping:
+    format: text
+  # ConversationSetsController#parse_openers! reads these five keys, all always present. The parser checks the
+  # counts (5 openers, 3 next reads), the angles, the chapter boundary, the no-shame rule, and links.
+  bookclubfever_openers_v1:
+    format: json
+    required_keys: [book_familiarity, spoiler_boundary, openers, spoiler_free_line, next_reads]

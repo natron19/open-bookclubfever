@@ -1,0 +1,11 @@
+<div class="alert alert-warning">
+  <strong>The AI&rsquo;s answer could not be used.</strong>
+  <p class="mb-1"><%= set.failure_reason %>.</p>
+  <p class="mb-2 small">
+    The answer did not match the expected shape or broke one of this feature&rsquo;s rules (nothing past your
+    chapter, never a hint that anyone is behind, no links). Try again, or edit the template in the admin panel to
+    tighten the instructions.
+  </p>
+  <%= render "book_picks/openers_button", book_pick: book_pick, label: "Retry",
+             button_class: "btn btn-outline-warning btn-sm" %>
+</div>

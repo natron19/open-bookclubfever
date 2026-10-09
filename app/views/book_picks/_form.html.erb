@@ -1,0 +1,81 @@
+<div style="max-width: 720px;">
+  <%= form_with model: book_pick,
+        data: { controller: "form-submit", action: "submit->form-submit#disable" } do |f| %>
+
+    <% if book_pick.errors.any? %>
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          <% book_pick.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="row g-3 mb-3">
+      <div class="col-md-7">
+        <%= f.label :title, "Book title", class: "form-label" %>
+        <%= f.text_field :title, maxlength: 200,
+              class: "form-control #{'is-invalid' if book_pick.errors[:title].any?}",
+              placeholder: "e.g. Frankenstein" %>
+        <% if book_pick.errors[:title].any? %>
+          <div class="invalid-feedback"><%= book_pick.errors[:title].first %></div>
+        <% end %>
+      </div>
+      <div class="col-md-5">
+        <%= f.label :author, "Author", class: "form-label" %>
+        <%= f.text_field :author, maxlength: 120,
+              class: "form-control #{'is-invalid' if book_pick.errors[:author].any?}",
+              placeholder: "e.g. Mary Shelley" %>
+        <% if book_pick.errors[:author].any? %>
+          <div class="invalid-feedback"><%= book_pick.errors[:author].first %></div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="row g-3 mb-3">
+      <div class="col-md-7">
+        <%= f.label :read_through, "How far the club has read", class: "form-label" %>
+        <%= f.select :read_through,
+              BookPick::READ_THROUGHS.map { |r| [BookPick::READ_THROUGH_LABELS[r], r] },
+              {}, class: "form-select #{'is-invalid' if book_pick.errors[:read_through].any?}" %>
+        <% if book_pick.errors[:read_through].any? %>
+          <div class="invalid-feedback"><%= book_pick.errors[:read_through].first %></div>
+        <% end %>
+      </div>
+      <div class="col-md-5">
+        <%= f.label :chapter, "Chapter", class: "form-label" %>
+        <%= f.number_field :chapter, min: 1, max: 500,
+              class: "form-control #{'is-invalid' if book_pick.errors[:chapter].any?}",
+              placeholder: "e.g. 10" %>
+        <div class="form-text">Only for &ldquo;Up to a chapter&rdquo;: the last chapter the meeting covers.</div>
+        <% if book_pick.errors[:chapter].any? %>
+          <div class="invalid-feedback"><%= book_pick.errors[:chapter].first %></div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :club_vibe, "Club vibe", class: "form-label" %>
+      <%= f.select :club_vibe,
+            BookPick::CLUB_VIBES.map { |v| [BookPick::CLUB_VIBE_LABELS[v], v] },
+            {}, class: "form-select #{'is-invalid' if book_pick.errors[:club_vibe].any?}" %>
+      <% if book_pick.errors[:club_vibe].any? %>
+        <div class="invalid-feedback"><%= book_pick.errors[:club_vibe].first %></div>
+      <% end %>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :reader_notes, "Reader notes", class: "form-label" %>
+      <%= f.text_area :reader_notes, rows: 4, maxlength: 1500,
+            class: "form-control #{'is-invalid' if book_pick.errors[:reader_notes].any?}",
+            placeholder: "Optional. What people have been saying, arguing about, or want to talk about." %>
+      <div class="form-text">Optional. First names are fine here; the openers never repeat them.</div>
+      <% if book_pick.errors[:reader_notes].any? %>
+        <div class="invalid-feedback"><%= book_pick.errors[:reader_notes].first %></div>
+      <% end %>
+    </div>
+
+    <%= f.submit "Save book", class: "btn btn-primary", data: { form_submit_target: "button" } %>
+  <% end %>
+</div>

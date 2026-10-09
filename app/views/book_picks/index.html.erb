@@ -1,0 +1,42 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3 mb-0">My book club picks</h1>
+  <%= link_to "Add a book", new_book_pick_path, class: "btn btn-primary btn-sm" %>
+</div>
+
+<% if @book_picks.empty? %>
+  <div class="text-center py-5">
+    <p class="text-muted mb-3">No books yet. Add the one your club is meeting about next.</p>
+    <%= link_to "Add your first book", new_book_pick_path, class: "btn btn-primary" %>
+  </div>
+<% else %>
+  <div class="row g-3">
+    <% @book_picks.each do |book_pick| %>
+      <% set = book_pick.latest_conversation_set %>
+      <div class="col-12">
+        <%= link_to book_pick_path(book_pick), class: "text-decoration-none" do %>
+          <div class="card card-hover book-spine">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                  <h2 class="h5 card-title mb-1 text-body"><%= book_pick.title %></h2>
+                  <p class="text-muted small mb-2"><%= book_pick.author %></p>
+                  <%= render "book_picks/boundary_badges", book_pick: book_pick %>
+                </div>
+                <div class="text-end small flex-shrink-0">
+                  <% if set&.completed? %>
+                    <div class="text-body">5 openers ready</div>
+                    <div class="text-muted">written <%= time_ago_in_words(set.generated_at) %> ago</div>
+                  <% elsif set&.failed? %>
+                    <div class="text-muted fst-italic">last try could not be used</div>
+                  <% else %>
+                    <div class="text-muted fst-italic">no openers yet</div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

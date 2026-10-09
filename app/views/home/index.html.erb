@@ -1,0 +1,86 @@
+<div class="text-center py-5">
+  <h1 class="display-5 fw-bold"><%= ENV.fetch("APP_NAME", "BookClubFever Demo") %></h1>
+  <p class="lead text-muted mt-2"><%= ENV.fetch("APP_TAGLINE", "") %></p>
+  <p class="text-muted mx-auto mt-3" style="max-width: 620px;">
+    Hosting the book club tonight and the room might go quiet? Tell it the book, how far the meeting covers, and
+    what people have been saying. You get five openers that are easy to say out loud, a spoiler-free line for the
+    group chat, and three books to read next. Nothing past your chapter, no reviews, and never a word about who
+    hasn&rsquo;t finished.
+  </p>
+  <div class="mt-4 d-flex justify-content-center gap-3">
+    <% if signed_in? %>
+      <%= link_to "Go to my books", book_picks_path, class: "btn btn-primary btn-lg" %>
+    <% else %>
+      <%= link_to "Try it free", sign_up_path, class: "btn btn-primary btn-lg" %>
+      <%= link_to "Sign in", sign_in_path, class: "btn btn-outline-secondary btn-lg" %>
+    <% end %>
+  </div>
+</div>
+
+<hr class="my-5 opacity-25">
+
+<div class="mx-auto" style="max-width: 860px;">
+  <h2 class="h5 text-muted text-center mb-4">Example &mdash; a fictional library club, ten chapters into <em>Frankenstein</em></h2>
+
+  <div class="card book-spine mb-3">
+    <div class="card-body">
+      <p class="text-muted small mb-1">What the host typed</p>
+      <p class="mb-2"><strong>Frankenstein</strong> by Mary Shelley &middot; up to the end of chapter 10 &middot; mixed club</p>
+      <p class="mb-0 fst-italic">
+        &ldquo;First meeting. A few people said Victor is impossible to like. One person loved Walton&rsquo;s
+        letters at the start and nobody else did.&rdquo;
+      </p>
+    </div>
+  </div>
+
+  <p class="boundary-line mb-3"><strong>Spoiler boundary:</strong> Stays within chapters 1 to 10.</p>
+
+  <div class="card opener-card mb-2">
+    <div class="card-body d-flex justify-content-between align-items-start gap-3">
+      <p class="opener-question mb-0">Some of you find Victor impossible to like; is that a flaw in the book, or the whole point of it?</p>
+      <span class="badge angle-badge flex-shrink-0">disagreement</span>
+    </div>
+  </div>
+  <div class="card opener-card mb-2">
+    <div class="card-body d-flex justify-content-between align-items-start gap-3">
+      <p class="opener-question mb-0">We hear all of this through Walton&rsquo;s letters before Victor says a word; why do you think Shelley wrapped it in someone else&rsquo;s voice?</p>
+      <span class="badge angle-badge flex-shrink-0">craft</span>
+    </div>
+  </div>
+  <div class="card opener-card mb-3">
+    <div class="card-body d-flex justify-content-between align-items-start gap-3">
+      <p class="opener-question mb-0">Victor hides his work from everyone who loves him; have you ever kept a project to yourself until it felt too big to share?</p>
+      <span class="badge angle-badge flex-shrink-0">personal</span>
+    </div>
+  </div>
+  <p class="text-muted small text-center mb-4">&hellip; plus two more openers, each with a follow-up question.</p>
+
+  <div class="row g-4 small">
+    <div class="col-md-6">
+      <h3 class="h6">For the group chat</h3>
+      <blockquote class="spoiler-free mb-0">Chapter 10 ends on a glacier with a conversation you will want to talk about on Thursday.</blockquote>
+    </div>
+    <div class="col-md-6">
+      <h3 class="h6">Read next</h3>
+      <ul class="mb-0">
+        <li><em>Strange Case of Dr Jekyll and Mr Hyde</em>, Robert Louis Stevenson</li>
+        <li><em>The Island of Doctor Moreau</em>, H. G. Wells</li>
+        <li><em>Dracula</em>, Bram Stoker</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="text-center text-muted small mt-4">
+    AI-generated. A host&rsquo;s starting point, not a reading guide: check any plot detail against the book.
+  </p>
+</div>
+
+<div class="text-center mt-5 pb-4">
+  <% unless signed_in? %>
+    <%= link_to "Get openers for your club &rarr;".html_safe, sign_up_path, class: "btn btn-primary" %>
+  <% end %>
+  <div class="mt-3 text-muted small">
+    Open source &middot;
+    <a href="https://bookclubfever.com" class="text-muted">BookClubFever</a>
+  </div>
+</div>
