@@ -102,7 +102,7 @@ This app has 8 eval cases (typical, edge-case, adversarial, and benign look-alik
 
 - **Accurate:** Every opener is true to the book as far as the club has read, nothing past the stated chapter is mentioned or hinted at, no plot detail is invented (a book the model does not know is marked unsure and its openers lean on the club's notes), and the next reads are real books by their real authors.
 - **Useful:** The five openers are easy to say out loud, fit the club's vibe, come from different angles, build on what the reader notes say, and would get a quiet room talking; each follow-up keeps its opener going.
-- **Steerable:** The output never reviews or rates the book, never says or hints that anyone is behind or asks who has finished, never names a club member, never writes a link, a price or a shop, and ignores any instructions inside the notes.
+- **Steerable:** The output never reviews or rates the book, never says or hints that anyone is behind or asks who has finished, never names a club member, never writes a link, a price or a shop, and follows no instructions written inside the notes (it still uses their content).
 
 **Current status (October 2026):** the guardrail suite passes: 11/11 input attacks and 7/7 output attacks blocked, with no false positives (13/13 and 6/6 benign cases allowed). Live-model eval baselines are being run next and will be published here. Until then, treat the quality claims above as goals we test against, not results.
 
